@@ -335,7 +335,7 @@ class Model(nn.Module):
         if self.using_tpu:
             xm.save(model_dict, model_path)
         else:
-            torch.save(model_dict, model_path)
+            torch.save(model_dict, model_path)    
 
     def load(self, model_path, weights_only=False, device="cuda"):
         if device == "tpu":
@@ -344,14 +344,27 @@ class Model(nn.Module):
             else:
                 self.using_tpu = True
                 device = xm.xla_device()
+                
         self.device = device
         if next(self.parameters()).device != self.device:
             self.to(self.device)
+            
         model_dict = torch.load(model_path, map_location=torch.device(device))
+        
         if weights_only:
-            self.load_state_dict(model_dict)
-        else:
+#             self.load_state_dict(model_dict)
             self.load_state_dict(model_dict["state_dict"])
+        else:
+#             self.load_state_dict(model_dict["state_dict"])
+            self.load_state_dict(model_dict)
+    
+    def load_state_dict(self, model_dict):        
+        self.load_state_dict(model_dict["state_dict"])
+        self.optimizer.load_state_dict(model_dict["optimizer"])
+        self.scheduler.load_state_dict(model_dict["scheduler"])
+        self.current_epoch = model_dict["epoch"]
+        self.fp16 = model_dict["fp16"]
+        
 
     def fit(
         self,
