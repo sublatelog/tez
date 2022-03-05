@@ -334,7 +334,7 @@ class Model(nn.Module):
         model_dict["scheduler"] = sch_state_dict
         model_dict["epoch"] = self.current_epoch
         model_dict["fp16"] = self.fp16
-        model_dict["counter"] = self.counter
+#         model_dict["counter"] = self.counter
         if self.using_tpu:
             xm.save(model_dict, model_path)
         else:
@@ -370,7 +370,7 @@ class Model(nn.Module):
         self.scheduler.load_state_dict(model_dict["scheduler"])        
         self.current_epoch = model_dict["epoch"]        
         self.fp16 = model_dict["fp16"]
-        self.counter = model_dict["counter"]
+#         self.counter = model_dict["counter"]
         
 
     def fit(
