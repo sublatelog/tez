@@ -91,13 +91,13 @@ class Model(nn.Module):
         n_jobs,
         callbacks,
         fp16,
-        counter,
         train_collate_fn,
         valid_collate_fn,
         train_shuffle,
         valid_shuffle,
         accumulation_steps,
         clip_grad_norm,
+        counter,
     ):
 
         if callbacks is None:
