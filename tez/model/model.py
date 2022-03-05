@@ -352,9 +352,11 @@ class Model(nn.Module):
         model_dict = torch.load(model_path, map_location=torch.device(device))
         
         if weights_only:
+            print("weight only")
 #             self.load_state_dict(model_dict)
             self.load_state_dict(model_dict["state_dict"])
         else:
+            print("all")
 #             self.load_state_dict(model_dict["state_dict"])
             self.load_state_dict(model_dict)
     
