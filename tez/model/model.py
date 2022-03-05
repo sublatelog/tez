@@ -352,19 +352,24 @@ class Model(nn.Module):
         model_dict = torch.load(model_path, map_location=torch.device(device))
         
         if weights_only:
-            print("weight only")
 #             self.load_state_dict(model_dict)
             self.load_state_dict(model_dict["state_dict"])
         else:
-            print("all")
 #             self.load_state_dict(model_dict["state_dict"])
-            self.load_state_dict(model_dict)
+#             self.load_state_dict(model_dict)
+            self.load_model_state_dict(model_dict)
     
-    def load_state_dict(self, model_dict):        
+    def load_model_state_dict(self, model_dict):   
         self.load_state_dict(model_dict["state_dict"])
+        
+        self.optimizer = self.fetch_optimizer()
         self.optimizer.load_state_dict(model_dict["optimizer"])
+        
+        self.scheduler = self.fetch_scheduler()
         self.scheduler.load_state_dict(model_dict["scheduler"])
+        
         self.current_epoch = model_dict["epoch"]
+        
         self.fp16 = model_dict["fp16"]
         
 
