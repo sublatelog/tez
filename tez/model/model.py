@@ -422,6 +422,7 @@ class Model(nn.Module):
             valid_shuffle=valid_shuffle,
             accumulation_steps=accumulation_steps,
             clip_grad_norm=clip_grad_norm,
+            counter=counter,
         )
 
         for _ in range(epochs):
