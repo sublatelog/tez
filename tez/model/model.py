@@ -42,7 +42,6 @@ class Model(nn.Module):
         self.device = None
         self._callback_runner = None
         self.fp16 = False
-        self.counter = 0
         self.scaler = None
         self.accumulation_steps = 0
         self.batch_index = 0
@@ -97,7 +96,6 @@ class Model(nn.Module):
         valid_shuffle,
         accumulation_steps,
         clip_grad_norm,
-        counter,
     ):
 
         if callbacks is None:
@@ -334,7 +332,7 @@ class Model(nn.Module):
         model_dict["scheduler"] = sch_state_dict
         model_dict["epoch"] = self.current_epoch
         model_dict["fp16"] = self.fp16
-#         model_dict["counter"] = self.counter
+        
         if self.using_tpu:
             xm.save(model_dict, model_path)
         else:
@@ -370,7 +368,6 @@ class Model(nn.Module):
         self.scheduler.load_state_dict(model_dict["scheduler"])        
         self.current_epoch = model_dict["epoch"]        
         self.fp16 = model_dict["fp16"]
-#         self.counter = model_dict["counter"]
         
 
     def fit(
@@ -422,7 +419,6 @@ class Model(nn.Module):
             valid_shuffle=valid_shuffle,
             accumulation_steps=accumulation_steps,
             clip_grad_norm=clip_grad_norm,
-            counter=counter,
         )
 
         for _ in range(epochs):
